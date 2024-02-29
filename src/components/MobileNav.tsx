@@ -1,7 +1,8 @@
 import styled from "styled-components"
 import { breakpoints, colors, fontSizes, spacing } from "../variables"
-import { MobileNavButton, toggleNav } from "./MainNav"
+import { MobileNavButton } from "./MainNav"
 import { NavLink } from "react-router-dom"
+import { toggleNav } from "../utils"
 
 const NavWrapper = styled.div`
   position: fixed;
@@ -12,6 +13,8 @@ const NavWrapper = styled.div`
   max-width: 400px;
   background: ${colors['neutral-800']};
   transition: 400ms right;
+  overflow-y: scroll;
+  z-index: 4;
 
   @media screen and (min-width: ${breakpoints['screen-md']}) {
     display: none;

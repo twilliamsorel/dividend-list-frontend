@@ -3,6 +3,27 @@ import { spacing, colors, fontSizes, breakpoints } from "../variables"
 import logo from '../assets/logo.svg'
 import { NavLink, Link } from "react-router-dom"
 import TitleSection from "./TitleSection"
+import { toggleNav } from "../utils"
+
+const ScrollWrapper = styled.div`
+  position: relative;
+  height: 177px;
+
+  &.sticky {
+    [data-tag="nav"], [data-tag="title"] {
+      position: fixed;
+      z-index: 3;
+
+      .inner-wrapper {
+        padding: ${spacing[4]}px inherit;
+      }
+    }
+
+    [data-tag="title"] {
+      top: 98px;
+    }
+  }
+`
 
 const NavWrapper = styled.div`
   width: 100%;
@@ -94,9 +115,17 @@ export const MobileNavButton = styled.div`
   }
 `
 
-export const toggleNav = () => {
-  document.body.classList.contains('mobile-nav-open') ? document.body.classList.remove('mobile-nav-open') : document.body.classList.add('mobile-nav-open')
+const toggleStickyNav = () => {
+  const nav = document.querySelector('#main-nav')
+
+  if (window.scrollY > 0 && !nav?.classList.contains('sticky')) {
+    nav?.classList.add('sticky')
+  } else if (window.scrollY <= 1) {
+    nav?.classList.remove('sticky')
+  }
 }
+
+window.addEventListener('scroll', toggleStickyNav)
 
 interface Props {
   title: string
@@ -104,9 +133,9 @@ interface Props {
 
 export default function MainNav({ title }: Props) {
   return (
-    <>
-      <NavWrapper>
-        <InnerWrapper>
+    <ScrollWrapper id="main-nav">
+      <NavWrapper data-tag="nav">
+        <InnerWrapper className="inner-wrapper">
           <LogoWrapper>
             <Link className="link" to='/'>
               <img src={logo} />
@@ -142,6 +171,6 @@ export default function MainNav({ title }: Props) {
         </InnerWrapper>
       </NavWrapper>
       <TitleSection title={title} />
-    </>
+    </ScrollWrapper>
   )
 }
