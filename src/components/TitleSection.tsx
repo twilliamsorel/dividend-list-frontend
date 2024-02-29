@@ -7,10 +7,9 @@ const OuterWrapper = styled.div`
 `
 
 const InnerWrapper = styled.div`
-  width: 100%;
   max-width: 1200px;
   margin: 0 auto;
-  padding: ${spacing[5]}px 0;
+  padding: ${spacing[5]}px;
   color: ${colors['neutral-900']};
   font-size: ${fontSizes[7]}px;
   font-weight: 600;

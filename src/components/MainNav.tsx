@@ -10,7 +10,7 @@ const NavWrapper = styled.div`
 `
 
 const InnerWrapper = styled.div`
-  width: 100%;
+  padding: 0 ${spacing[5]}px;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
