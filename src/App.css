@@ -1,0 +1,7 @@
+body.mobile-nav-open {
+  overflow: hidden;
+}
+
+body.mobile-nav-open #mobile-nav {
+  right: 0;
+}
