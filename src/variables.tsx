@@ -26,3 +26,8 @@ export const breakpoints = {
   'screen-lg': '1200px',
   'screen-xl': '1400px'
 }
+
+export const misc = {
+  'nav-height-small': '177px',
+  'nav-height-large': '275px'
+}

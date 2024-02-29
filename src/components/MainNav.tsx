@@ -1,27 +1,26 @@
 import styled from "styled-components"
-import { spacing, colors, fontSizes, breakpoints } from "../variables"
+import { spacing, colors, fontSizes, breakpoints, misc } from "../variables"
 import logo from '../assets/logo.svg'
 import { NavLink, Link } from "react-router-dom"
 import TitleSection from "./TitleSection"
 import { toggleNav } from "../utils"
 
+// TODO: Shring padding when scrolling on larger screen sizes.
+//       Will need to use a media query to target the element.
+const Spacer = styled.div`
+  height: ${misc['nav-height-small']};
+
+  @media screen and (min-width: ${breakpoints['screen-md']}) {
+    height: ${misc['nav-height-large']};
+  }
+`
+
 const ScrollWrapper = styled.div`
-  position: relative;
-  height: 177px;
-
+  width: 100%;
+  
   &.sticky {
-    [data-tag="nav"], [data-tag="title"] {
-      position: fixed;
-      z-index: 3;
-
-      .inner-wrapper {
-        padding: ${spacing[4]}px inherit;
-      }
-    }
-
-    [data-tag="title"] {
-      top: 98px;
-    }
+    position: fixed;
+    z-index: 3;
   }
 `
 
@@ -124,7 +123,6 @@ const toggleStickyNav = () => {
     nav?.classList.remove('sticky')
   }
 }
-
 window.addEventListener('scroll', toggleStickyNav)
 
 interface Props {
@@ -133,44 +131,46 @@ interface Props {
 
 export default function MainNav({ title }: Props) {
   return (
-    <ScrollWrapper id="main-nav">
-      <NavWrapper data-tag="nav">
-        <InnerWrapper className="inner-wrapper">
-          <LogoWrapper>
-            <Link className="link" to='/'>
-              <img src={logo} />
-              <h1>Dividend List</h1>
-            </Link>
-          </LogoWrapper>
+    <Spacer>
+      <ScrollWrapper id="main-nav">
+        <NavWrapper>
+          <InnerWrapper className="inner-wrapper">
+            <LogoWrapper>
+              <Link className="link" to='/'>
+                <img src={logo} />
+                <h1>Dividend List</h1>
+              </Link>
+            </LogoWrapper>
 
-          <div>
-            <MobileNavButton onClick={toggleNav}>
-              <span className="material-symbols-outlined">menu_open</span>
-            </MobileNavButton>
-            <nav>
-              <Nav>
-                <li>
-                  <NavLink
-                      to={`/`}
+            <div>
+              <MobileNavButton onClick={toggleNav}>
+                <span className="material-symbols-outlined">menu_open</span>
+              </MobileNavButton>
+              <nav>
+                <Nav>
+                  <li>
+                    <NavLink
+                        to={`/`}
+                        className={({ isActive, isPending }) =>
+                          isActive ? "active" : isPending ? "pending" : ""
+                        }> Discover </NavLink>
+                  </li>
+                  <li><a href=''>Guides</a></li>
+                  <li>
+                    <NavLink
+                      to={`/about`}
                       className={({ isActive, isPending }) =>
                         isActive ? "active" : isPending ? "pending" : ""
-                      }> Discover </NavLink>
-                </li>
-                <li><a href=''>Guides</a></li>
-                <li>
-                  <NavLink
-                    to={`/about`}
-                    className={({ isActive, isPending }) =>
-                      isActive ? "active" : isPending ? "pending" : ""
-                    }> About </NavLink>
-                </li>
-                <li><a href=''>Dashboard</a></li>
-              </Nav>
-            </nav>
-          </div>
-        </InnerWrapper>
-      </NavWrapper>
-      <TitleSection title={title} />
-    </ScrollWrapper>
+                      }> About </NavLink>
+                  </li>
+                  <li><a href=''>Dashboard</a></li>
+                </Nav>
+              </nav>
+            </div>
+          </InnerWrapper>
+        </NavWrapper>
+        <TitleSection title={title} />
+      </ScrollWrapper>
+    </Spacer>
   )
 }

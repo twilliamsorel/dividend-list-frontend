@@ -26,7 +26,7 @@ interface Props {
 
 export default function TitleSection ({ title }: Props) {
   return (
-    <OuterWrapper data-tag="title">
+    <OuterWrapper>
       <InnerWrapper>
         {title}
       </InnerWrapper>
