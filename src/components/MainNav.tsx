@@ -1,28 +1,9 @@
 import styled from "styled-components"
-import { spacing, colors, fontSizes, breakpoints, misc } from "../variables"
+import { spacing, colors, fontSizes, breakpoints} from "../variables"
 import logo from '../assets/logo.svg'
 import { NavLink, Link } from "react-router-dom"
 import TitleSection from "./TitleSection"
 import { toggleNav } from "../utils"
-
-// TODO: Shring padding when scrolling on larger screen sizes.
-//       Will need to use a media query to target the element.
-const Spacer = styled.div`
-  height: ${misc['nav-height-small']};
-
-  @media screen and (min-width: ${breakpoints['screen-md']}) {
-    height: ${misc['nav-height-large']};
-  }
-`
-
-const ScrollWrapper = styled.div`
-  width: 100%;
-  
-  &.sticky {
-    position: fixed;
-    z-index: 3;
-  }
-`
 
 const NavWrapper = styled.div`
   width: 100%;
@@ -39,7 +20,7 @@ const InnerWrapper = styled.div`
   margin: 0 auto;
 
   @media screen and (min-width: ${breakpoints['screen-md']}) {
-    padding: ${spacing[12]}px ${spacing[5]}px;
+    padding: ${spacing[8]}px ${spacing[5]}px;
   }
 `
 
@@ -114,16 +95,6 @@ export const MobileNavButton = styled.div`
   }
 `
 
-const toggleStickyNav = () => {
-  const nav = document.querySelector('#main-nav')
-
-  if (window.scrollY > 0 && !nav?.classList.contains('sticky')) {
-    nav?.classList.add('sticky')
-  } else if (window.scrollY <= 1) {
-    nav?.classList.remove('sticky')
-  }
-}
-window.addEventListener('scroll', toggleStickyNav)
 
 interface Props {
   title: string
@@ -131,46 +102,44 @@ interface Props {
 
 export default function MainNav({ title }: Props) {
   return (
-    <Spacer>
-      <ScrollWrapper id="main-nav">
-        <NavWrapper>
-          <InnerWrapper className="inner-wrapper">
-            <LogoWrapper>
-              <Link className="link" to='/'>
-                <img src={logo} />
-                <h1>Dividend List</h1>
-              </Link>
-            </LogoWrapper>
+    <>
+      <NavWrapper id="main-nav">
+        <InnerWrapper>
+          <LogoWrapper>
+            <Link className="link" to='/'>
+              <img src={logo} />
+              <h1>Dividend List</h1>
+            </Link>
+          </LogoWrapper>
 
-            <div>
-              <MobileNavButton onClick={toggleNav}>
-                <span className="material-symbols-outlined">menu_open</span>
-              </MobileNavButton>
-              <nav>
-                <Nav>
-                  <li>
-                    <NavLink
-                        to={`/`}
-                        className={({ isActive, isPending }) =>
-                          isActive ? "active" : isPending ? "pending" : ""
-                        }> Discover </NavLink>
-                  </li>
-                  <li><a href=''>Guides</a></li>
-                  <li>
-                    <NavLink
-                      to={`/about`}
+          <div>
+            <MobileNavButton onClick={toggleNav}>
+              <span className="material-symbols-outlined">menu_open</span>
+            </MobileNavButton>
+            <nav>
+              <Nav>
+                <li>
+                  <NavLink
+                      to={`/`}
                       className={({ isActive, isPending }) =>
                         isActive ? "active" : isPending ? "pending" : ""
-                      }> About </NavLink>
-                  </li>
-                  <li><a href=''>Dashboard</a></li>
-                </Nav>
-              </nav>
-            </div>
-          </InnerWrapper>
-        </NavWrapper>
-        <TitleSection title={title} />
-      </ScrollWrapper>
-    </Spacer>
+                      }> Discover </NavLink>
+                </li>
+                <li><a href=''>Guides</a></li>
+                <li>
+                  <NavLink
+                    to={`/about`}
+                    className={({ isActive, isPending }) =>
+                      isActive ? "active" : isPending ? "pending" : ""
+                    }> About </NavLink>
+                </li>
+                <li><a href=''>Dashboard</a></li>
+              </Nav>
+            </nav>
+          </div>
+        </InnerWrapper>
+      </NavWrapper>
+      <TitleSection title={title} />
+    </>
   )
 }

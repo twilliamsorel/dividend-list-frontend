@@ -28,6 +28,6 @@ export const breakpoints = {
 }
 
 export const misc = {
-  'nav-height-small': '177px',
-  'nav-height-large': '275px'
+  'title-height-small': '79px',
+  'title-height-large': '94px'
 }
