@@ -95,6 +95,36 @@ export const MobileNavButton = styled.div`
   }
 `
 
+export function MainMenuItems() {
+  return (
+    <div>
+      <MobileNavButton onClick={toggleNav}>
+        <span className="material-symbols-outlined">menu_open</span>
+      </MobileNavButton>
+      <nav>
+        <Nav>
+          <li>
+            <NavLink
+                to={`/`}
+                className={({ isActive, isPending }) =>
+                  isActive ? "active" : isPending ? "pending" : ""
+                }> Discover </NavLink>
+          </li>
+          <li><a href=''>Guides</a></li>
+          <li>
+            <NavLink
+              to={`/about`}
+              className={({ isActive, isPending }) =>
+                isActive ? "active" : isPending ? "pending" : ""
+              }> About </NavLink>
+          </li>
+          <li><a href=''>Dashboard</a></li>
+        </Nav>
+      </nav>
+    </div>
+  )
+}
+
 
 interface Props {
   title: string
@@ -112,31 +142,7 @@ export default function MainNav({ title }: Props) {
             </Link>
           </LogoWrapper>
 
-          <div>
-            <MobileNavButton onClick={toggleNav}>
-              <span className="material-symbols-outlined">menu_open</span>
-            </MobileNavButton>
-            <nav>
-              <Nav>
-                <li>
-                  <NavLink
-                      to={`/`}
-                      className={({ isActive, isPending }) =>
-                        isActive ? "active" : isPending ? "pending" : ""
-                      }> Discover </NavLink>
-                </li>
-                <li><a href=''>Guides</a></li>
-                <li>
-                  <NavLink
-                    to={`/about`}
-                    className={({ isActive, isPending }) =>
-                      isActive ? "active" : isPending ? "pending" : ""
-                    }> About </NavLink>
-                </li>
-                <li><a href=''>Dashboard</a></li>
-              </Nav>
-            </nav>
-          </div>
+          <MainMenuItems />
         </InnerWrapper>
       </NavWrapper>
       <TitleSection title={title} />

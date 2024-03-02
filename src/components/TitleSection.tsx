@@ -1,6 +1,7 @@
 import styled from "styled-components"
 import { colors, spacing, fontSizes, breakpoints, misc } from "../variables"
 import { useEffect, useState } from "react"
+import { MainMenuItems } from "./MainNav"
 
 const StickyWrapper = styled.div`
   width: 100%;
@@ -26,13 +27,27 @@ const InnerWrapper = styled.div`
   max-width: 1200px;
   margin: 0 auto;
   padding: ${spacing[3]}px ${spacing[5]}px;
-  color: ${colors['neutral-900']};
-  font-size: ${fontSizes[6]}px;
-  font-weight: 600;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  color: ${colors['neutral-1100']};
 
   @media screen and (min-width: ${breakpoints['screen-md']}) {
     font-size: ${fontSizes[7]}px;
     padding: ${spacing[4]}px ${spacing[5]}px;
+  }
+`
+
+const Header = styled.h2`
+  font-size: ${fontSizes[6]}px;
+  font-weight: 600;
+`
+
+const MenuWrapper = styled.div`
+  font-size: ${fontSizes[5]}px;
+  &.hidden {
+    display: none;
   }
 `
 
@@ -66,7 +81,10 @@ export default function TitleSection ({ title }: Props) {
     <StickyWrapper>
       <OuterWrapper id="title-nav" className={sticky ? "sticky" : ""}>
         <InnerWrapper className="title-section-inner-wrapper">
-          {title}
+          <Header>{title}</Header>
+          <MenuWrapper className={sticky ? "" : "hidden"}>
+            <MainMenuItems />
+          </MenuWrapper>
         </InnerWrapper>
       </OuterWrapper>
     </StickyWrapper>
