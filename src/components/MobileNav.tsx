@@ -71,7 +71,7 @@ export default function MobileNav () {
           <span className="material-symbols-outlined">menu_open</span>
         </RotatedNavButton>
       </Header>
-      <Menu>
+      <Menu onClick={toggleNav}>
         <li><NavLink
           to={`/`}
           className={({ isActive, isPending }) =>

@@ -2,6 +2,7 @@ import styled from "styled-components"
 import { colors, spacing, fontSizes, breakpoints, misc } from "../variables"
 import { useEffect, useState } from "react"
 import { MainMenuItems } from "./MainNav"
+import { useLocation } from "react-router"
 
 const StickyWrapper = styled.div`
   width: 100%;
@@ -57,6 +58,7 @@ interface Props {
 
 export default function TitleSection ({ title }: Props) {
   const [sticky, setSticky] = useState(false)
+  const location = useLocation()
 
   useEffect(() => { 
     const toggleStickyNav = () => {
@@ -73,9 +75,10 @@ export default function TitleSection ({ title }: Props) {
       setSticky(isInPosition)
     }
 
-    window.addEventListener('scroll', toggleStickyNav) 
+    toggleStickyNav()
+    window.addEventListener('scroll', toggleStickyNav)
     return () => window.removeEventListener('scroll', toggleStickyNav)
-  })
+  }, [location])
 
   return (
     <StickyWrapper>
