@@ -1,7 +1,6 @@
 import styled from "styled-components"
 import { breakpoints, colors, fontSizes, spacing } from "../variables"
-import { MobileNavButton } from "./MainNav"
-import { NavLink } from "react-router-dom"
+import { MobileNavButton, NavItems } from "./MainNav"
 import { toggleNav } from "../utils"
 
 const NavWrapper = styled.div`
@@ -34,30 +33,28 @@ const Header = styled.header`
   }
 `
 
-const RotatedNavButton = styled(MobileNavButton)`
-  transform: rotate(180deg);
-`
+const Nav = styled.nav`
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
 
-const Menu = styled.ul`
-  list-style: none;
-  margin: 0;
-  padding: 0;
+    a {
+      display: block;
+      color: inherit;
+      text-decoration: none;
+      font-size: ${fontSizes[5]}px;
+      border-bottom: 1px solid ${colors['neutral-600']};
+      padding: ${spacing[3]}px ${spacing[8]}px ${spacing[3]}px ${spacing[10]}px;
+      transition: 100ms background;
 
-  a {
-    display: block;
-    color: inherit;
-    text-decoration: none;
-    font-size: ${fontSizes[5]}px;
-    border-bottom: 1px solid ${colors['neutral-600']};
-    padding: ${spacing[3]}px ${spacing[8]}px ${spacing[3]}px ${spacing[10]}px;
-    transition: 100ms background;
+      &.active {
+        background: ${colors['neutral-900']};
+      }
 
-    &.active {
-      background: ${colors['neutral-900']};
-    }
-
-    &:hover {
-      background: ${colors['neutral-700']};
+      &:hover {
+        background: ${colors['neutral-700']};
+      }
     }
   }
 `
@@ -67,25 +64,11 @@ export default function MobileNav () {
     <NavWrapper id="mobile-nav">
       <Header>
         <h2>Menu</h2>
-        <RotatedNavButton onClick={toggleNav}>
-          <span className="material-symbols-outlined">menu_open</span>
-        </RotatedNavButton>
+        <MobileNavButton rotated={true} />
       </Header>
-      <Menu onClick={toggleNav}>
-        <li><NavLink
-          to={`/`}
-          className={({ isActive, isPending }) =>
-            isActive ? "active" : isPending ? "pending" : ""
-          }> Discover </NavLink>
-        </li>
-        <li><a href="">Guides</a></li>
-        <li><NavLink
-          to={`/about`}
-          className={({ isActive, isPending }) =>
-            isActive ? "active" : isPending ? "pending" : ""
-          }> About </NavLink></li>
-        <li><a href="">Dashboard</a></li>
-      </Menu>
+      <Nav onClick={toggleNav}>
+        <NavItems />
+      </Nav>
     </NavWrapper>
   )
 }

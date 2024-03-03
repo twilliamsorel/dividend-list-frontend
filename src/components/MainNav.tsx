@@ -55,35 +55,13 @@ const LogoWrapper = styled.div`
   }
 `
 
-const Nav = styled.ul`
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: none;
-
-  @media screen and (min-width: ${breakpoints['screen-md']}) {
-    display: block;
-  }
-
-  li {
-    display: inline-block;
-    margin-left: ${spacing[10]}px;
-    font-size: ${fontSizes[5]}px;
-
-    a {
-      color: inherit;
-      text-decoration: none;
-
-      &:hover, &.active {
-        text-decoration: underline;
-      }
-    }
-  }
-`
-
-export const MobileNavButton = styled.div`
+const NavButton = styled.div`
   display: block;
   cursor: pointer;
+
+  &.rotated {
+    transform: rotate(180deg);
+  }
   
   span {
     font-size: ${fontSizes[10]}px;
@@ -95,42 +73,85 @@ export const MobileNavButton = styled.div`
   }
 `
 
-export function MainMenuItems() {
+const Nav = styled.nav`
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: none;
+
+    @media screen and (min-width: ${breakpoints['screen-md']}) {
+      display: block;
+    }
+
+    li {
+      display: inline-block;
+      margin-left: ${spacing[10]}px;
+      font-size: ${fontSizes[5]}px;
+
+      a {
+        color: inherit;
+        text-decoration: none;
+
+        &:hover, &.active {
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+`
+
+interface MobileNavButtonProps {
+  rotated?: boolean
+}
+
+export function MobileNavButton ({rotated = false}: MobileNavButtonProps) {
   return (
-    <div>
-      <MobileNavButton onClick={toggleNav}>
-        <span className="material-symbols-outlined">menu_open</span>
-      </MobileNavButton>
-      <nav>
-        <Nav>
-          <li>
-            <NavLink
-                to={`/`}
-                className={({ isActive, isPending }) =>
-                  isActive ? "active" : isPending ? "pending" : ""
-                }> Discover </NavLink>
-          </li>
-          <li><a href=''>Guides</a></li>
-          <li>
-            <NavLink
-              to={`/about`}
-              className={({ isActive, isPending }) =>
-                isActive ? "active" : isPending ? "pending" : ""
-              }> About </NavLink>
-          </li>
-          <li><a href=''>Dashboard</a></li>
-        </Nav>
-      </nav>
-    </div>
+    <NavButton onClick={toggleNav} className={rotated? 'rotated' : ''}>
+      <span className="material-symbols-outlined">menu_open</span>
+    </NavButton>
   )
 }
 
+export function NavItems () {
+  return (
+    <ul>
+      <li>
+        <NavLink
+            to={`/`}
+            className={({ isActive, isPending }) =>
+              isActive ? "active" : isPending ? "pending" : ""
+            }> Discover </NavLink>
+      </li>
+      <li><a href=''>Guides</a></li>
+      <li>
+        <NavLink
+          to={`/about`}
+          className={({ isActive, isPending }) =>
+            isActive ? "active" : isPending ? "pending" : ""
+          }> About </NavLink>
+      </li>
+      <li><a href=''>Dashboard</a></li>
+    </ul>
+  )
+}
+
+export function MainNav () {
+  return (
+    <div>
+      <MobileNavButton />
+      <Nav>
+        <NavItems />
+      </Nav>
+    </div>
+  )
+}
 
 interface Props {
   title: string
 }
 
-export default function MainNav({ title }: Props) {
+export default function MainNavComponent({ title }: Props) {
   return (
     <>
       <NavWrapper id="main-nav">
@@ -142,7 +163,7 @@ export default function MainNav({ title }: Props) {
             </Link>
           </LogoWrapper>
 
-          <MainMenuItems />
+          <MainNav />
         </InnerWrapper>
       </NavWrapper>
       <TitleSection title={title} />

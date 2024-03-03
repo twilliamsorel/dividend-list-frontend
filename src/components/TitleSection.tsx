@@ -1,7 +1,7 @@
 import styled from "styled-components"
 import { colors, spacing, fontSizes, breakpoints, misc } from "../variables"
 import { useEffect, useState } from "react"
-import { MainMenuItems } from "./MainNav"
+import { MainNav } from "./MainNav"
 import { useLocation } from "react-router"
 
 const StickyWrapper = styled.div`
@@ -45,7 +45,7 @@ const Header = styled.h2`
   font-weight: 600;
 `
 
-const MenuWrapper = styled.div`
+const NavContainer = styled.div`
   font-size: ${fontSizes[5]}px;
   &.hidden {
     display: none;
@@ -85,9 +85,9 @@ export default function TitleSection ({ title }: Props) {
       <OuterWrapper id="title-nav" className={sticky ? "sticky" : ""}>
         <InnerWrapper className="title-section-inner-wrapper">
           <Header>{title}</Header>
-          <MenuWrapper className={sticky ? "" : "hidden"}>
-            <MainMenuItems />
-          </MenuWrapper>
+          <NavContainer className={sticky ? "" : "hidden"}>
+            <MainNav />
+          </NavContainer>
         </InnerWrapper>
       </OuterWrapper>
     </StickyWrapper>
