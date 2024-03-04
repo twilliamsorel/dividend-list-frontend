@@ -5,7 +5,6 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import App from './App';
-import About from "./pages/About"
 import Discover from "./pages/Discover"
 import ErrorPage from "./pages/Error"
 import './index.css'
@@ -18,10 +17,6 @@ const router = createBrowserRouter([
     children: [{
       path: "/",
       element: <Discover />
-    },
-    {
-      path: "/about",
-      element: <About />
     }]
   }
 ]);

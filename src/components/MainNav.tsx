@@ -123,15 +123,9 @@ export function NavItems () {
               isActive ? "active" : isPending ? "pending" : ""
             }> Discover </NavLink>
       </li>
-      <li><a href=''>Guides</a></li>
-      <li>
-        <NavLink
-          to={`/about`}
-          className={({ isActive, isPending }) =>
-            isActive ? "active" : isPending ? "pending" : ""
-          }> About </NavLink>
-      </li>
       <li><a href=''>Dashboard</a></li>
+      <li><a href=''>Settings</a></li>
+      <li><a href=''>Logout</a></li>
     </ul>
   )
 }

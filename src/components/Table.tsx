@@ -145,7 +145,9 @@ const TableBody = ({isBigScreen}: TableBodyProps) => {
           </td>
           <td style={isBigScreen ? {display: 'table-cell'} : {display: 'none'}}>{item.stock_type}</td>
           <td style={isBigScreen ? {display: 'table-cell'} : {display: 'none'}}>{item.frequency}</td>
-          <td style={isBigScreen ? {display: 'table-cell'} : {display: 'none'}}>{item.dividend_records}<label> | {(item.dividend_records / 12).toLocaleString(undefined, {maximumFractionDigits:2})} yrs</label></td>
+          <td style={isBigScreen ? {display: 'table-cell'} : {display: 'none'}}>
+            {item.dividend_records}<label> | {(item.dividend_records / 12).toLocaleString(undefined, {maximumFractionDigits:2})} yrs</label>
+          </td>
           <td>{item.dividend_volatility.toLocaleString(undefined, {maximumFractionDigits:2})}</td>
           <td>{item.percentage_yield.toLocaleString(undefined, {maximumFractionDigits:2})}%</td>
           <td>{item.median_percentage_yield.toLocaleString(undefined, {maximumFractionDigits:2})}%</td>
