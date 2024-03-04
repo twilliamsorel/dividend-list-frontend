@@ -123,7 +123,7 @@ const TableBody = ({isBigScreen}: TableBodyProps) => {
 
   useEffect(() => {
     (async function () {
-      const res = await getRequest(`http://localhost:5000/api/get-stocks/${pagination}`)
+      const res = await getRequest(`${import.meta.env.VITE_SERVER_URL}/api/get-stocks/${pagination}`)
       
       setData((data) => data.concat(JSON.parse(res)))
     }())
