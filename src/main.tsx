@@ -9,7 +9,7 @@ import Discover from "./pages/Discover"
 import ErrorPage from "./pages/Error"
 import './index.css'
 
-const router = createBrowserRouter([
+export const router = createBrowserRouter([
   {
     path: "/",
     element: <App />, 

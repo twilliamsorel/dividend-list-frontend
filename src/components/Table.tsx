@@ -143,11 +143,13 @@ const TableBody = ({isBigScreen}: TableBodyProps) => {
             {item.ticker}<br />
             <label className="inline-block">{item.company}</label>
           </td>
-          <td style={isBigScreen ? {display: 'table-cell'} : {display: 'none'}}>{item.stock_type}</td>
-          <td style={isBigScreen ? {display: 'table-cell'} : {display: 'none'}}>{item.frequency}</td>
-          <td style={isBigScreen ? {display: 'table-cell'} : {display: 'none'}}>
-            {item.dividend_records}<label> | {(item.dividend_records / 12).toLocaleString(undefined, {maximumFractionDigits:2})} yrs</label>
-          </td>
+          {isBigScreen && (<td>{item.stock_type}</td>)}
+          {isBigScreen && (<td>{item.frequency}</td>)}
+          {isBigScreen && (
+            <td>
+              {item.dividend_records}<label> | {(item.dividend_records / 12).toLocaleString(undefined, {maximumFractionDigits:2})} yrs</label>
+            </td>
+          )}
           <td>{item.dividend_volatility.toLocaleString(undefined, {maximumFractionDigits:2})}</td>
           <td>{item.percentage_yield.toLocaleString(undefined, {maximumFractionDigits:2})}%</td>
           <td>{item.median_percentage_yield.toLocaleString(undefined, {maximumFractionDigits:2})}%</td>
@@ -166,9 +168,9 @@ export default function Table () {
         <thead>
           <tr>
             <th>ticker</th>
-            <th style={isBigScreen ? {display: 'table-cell'} : {display: 'none'}}>stock type</th>
-            <th style={isBigScreen ? {display: 'table-cell'} : {display: 'none'}}>frequency</th>
-            <th style={isBigScreen ? {display: 'table-cell'} : {display: 'none'}}>div records</th>
+            {isBigScreen && (<th>stock type</th>)}
+            {isBigScreen && (<th>frequency</th>)}
+            {isBigScreen && (<th>div records</th>)}
             <th>div vol<span style={isBigScreen ? {display: 'inline'} : {display: 'none'}}>atility</span></th>
             <th>apy</th>
             <th>median apy</th>
