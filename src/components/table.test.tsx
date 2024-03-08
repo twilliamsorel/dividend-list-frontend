@@ -3,7 +3,7 @@ import Table from './Table'
 import { render } from '@testing-library/react'
 
 
-describe('Testing main nav', () => {
+describe('Testing main table', () => {
   it('should render properly on smaller screen sizes', () => {
     global.innerWidth = 500
     const component = render(<Table />)
