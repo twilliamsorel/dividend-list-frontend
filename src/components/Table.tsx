@@ -126,7 +126,7 @@ const TableBody = ({isBigScreen, searchQuery}: TableBodyProps) => {
     if (searchQuery.length > 0) {
       (async function () {
         const res = await getRequest(`${import.meta.env.VITE_SERVER_URL}/stocks/search/${searchQuery}`)
-        
+
         setPagination(0)
         setData(JSON.parse(res))
       }())
@@ -136,13 +136,17 @@ const TableBody = ({isBigScreen, searchQuery}: TableBodyProps) => {
         
         setData((data) => pagination === 0 ? JSON.parse(res) : data.concat(JSON.parse(res)))
       }())
-  
-      window.addEventListener('scroll', () => {
-        if (window.innerHeight - document.body.getBoundingClientRect().bottom >= 0 && searchQuery.length === 0) {
-          setPagination(pagination + 1)
-        }
-      })
     }
+
+    const scrollEvent = () => {
+      if (window.innerHeight - document.body.getBoundingClientRect().bottom >= 0 && searchQuery.length === 0) {
+        setPagination(pagination + 1)
+      }
+    }
+
+    window.addEventListener('scroll', scrollEvent)
+
+    return () => window.removeEventListener('scroll', scrollEvent)
   }, [pagination, searchQuery])
 
   return (
