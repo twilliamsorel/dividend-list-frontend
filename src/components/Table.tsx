@@ -114,52 +114,70 @@ interface DataProps {
 }
 
 interface TableBodyProps {
-  isBigScreen: boolean
+  isBigScreen: boolean,
+  searchQuery: string
 }
 
-const TableBody = ({isBigScreen}: TableBodyProps) => {
+const TableBody = ({isBigScreen, searchQuery}: TableBodyProps) => {
   const [pagination, setPagination] = useState(0)
   const [data, setData] = useState([])
 
   useEffect(() => {
-    (async function () {
-      const res = await getRequest(`${import.meta.env.VITE_SERVER_URL}/stocks/paginate/${pagination}`)
-      
-      setData((data) => data.concat(JSON.parse(res)))
-    }())
-
-    window.addEventListener('scroll', () => {
-      if (window.innerHeight - document.body.getBoundingClientRect().bottom >= 0) {
-        setPagination(pagination + 1)
-      }
-    })
-  }, [pagination])
+    if (searchQuery.length > 0) {
+      (async function () {
+        const res = await getRequest(`${import.meta.env.VITE_SERVER_URL}/stocks/search/${searchQuery}`)
+        
+        setPagination(0)
+        setData(JSON.parse(res))
+      }())
+    } else {
+      (async function () {
+        const res = await getRequest(`${import.meta.env.VITE_SERVER_URL}/stocks/paginate/${pagination}`)
+        
+        setData((data) => pagination === 0 ? JSON.parse(res) : data.concat(JSON.parse(res)))
+      }())
+  
+      window.addEventListener('scroll', () => {
+        if (window.innerHeight - document.body.getBoundingClientRect().bottom >= 0 && searchQuery.length === 0) {
+          setPagination(pagination + 1)
+        }
+      })
+    }
+  }, [pagination, searchQuery])
 
   return (
     <Rows>
-      {data.map((item: DataProps, index: number) => (
-        <tr key={index}>
-          <td>
-            {item.ticker}<br />
-            <label className="inline-block">{item.company}</label>
-          </td>
-          {isBigScreen && (<td>{item.stock_type}</td>)}
-          {isBigScreen && (<td>{item.frequency}</td>)}
-          {isBigScreen && (
+      {data.map((item: DataProps, index: number) => {
+        if (!item.stock_type) return
+
+        return (
+          <tr key={index}>
             <td>
-              {item.dividend_records}<label> | {(item.dividend_records / 12).toLocaleString(undefined, {maximumFractionDigits:2})} yrs</label>
+              {item.ticker}<br />
+              <label className="inline-block">{item.company}</label>
             </td>
-          )}
-          <td>{item.dividend_volatility.toLocaleString(undefined, {maximumFractionDigits:2})}</td>
-          <td>{item.percentage_yield.toLocaleString(undefined, {maximumFractionDigits:2})}%</td>
-          <td>{item.median_percentage_yield.toLocaleString(undefined, {maximumFractionDigits:2})}%</td>
-        </tr>
-      ))}
+            {isBigScreen && (<td>{item.stock_type}</td>)}
+            {isBigScreen && (<td>{item.frequency}</td>)}
+            {isBigScreen && (
+              <td>
+                {item.dividend_records}<label> | {(item.dividend_records / 12).toLocaleString(undefined, {maximumFractionDigits:2})} yrs</label>
+              </td>
+            )}
+            <td>{item.dividend_volatility.toLocaleString(undefined, {maximumFractionDigits:2})}</td>
+            <td>{item.percentage_yield.toLocaleString(undefined, {maximumFractionDigits:2})}%</td>
+            <td>{item.median_percentage_yield.toLocaleString(undefined, {maximumFractionDigits:2})}%</td>
+          </tr>
+        )
+      })}
     </Rows>
   )
 }
 
-export default function Table () {
+interface SearchQueryProps {
+  searchQuery: string
+}
+
+export default function Table ({searchQuery}: SearchQueryProps) {
   const isBigScreen = useMediaQuery({ query: `(min-width: ${breakpoints['screen-md']})`})
 
   return (
@@ -176,7 +194,7 @@ export default function Table () {
             <th>median apy</th>
           </tr>
         </thead>
-        <TableBody isBigScreen={isBigScreen} />
+        <TableBody isBigScreen={isBigScreen} searchQuery={searchQuery} />
       </DefaultTable>
     </SectionWrapper>
   )
