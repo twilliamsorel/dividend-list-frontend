@@ -1,7 +1,7 @@
 import styled from "styled-components"
 import { breakpoints, colors, fontSizes, spacing } from "../variables"
 import { SectionWrapper } from "./SectionWrapper"
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef, useCallback } from "react"
 import { getRequest } from "../utils"
 import { useMediaQuery } from "react-responsive"
 
@@ -121,14 +121,28 @@ interface TableBodyProps {
 const TableBody = ({isBigScreen, searchQuery}: TableBodyProps) => {
   const [pagination, setPagination] = useState(0)
   const [data, setData] = useState([])
+  const lock = useRef(false)
+
+  const throttle = useCallback((cb: () => void, timer: number) => {
+    if (!lock.current) { 
+      lock.current = true
+
+      setTimeout(() => {
+        cb()
+        lock.current = false
+      }, timer )
+    }
+  }, [])
+
 
   useEffect(() => {
     if (searchQuery.length > 0) {
-      (async function () {
-        const res = await getRequest(`${import.meta.env.VITE_SERVER_URL}/stocks/search/${searchQuery}`)
-
-        setPagination(0)
-        setData(JSON.parse(res))
+      (function () {
+        throttle(async () => {
+          const res = await getRequest(`${import.meta.env.VITE_SERVER_URL}/stocks/search/${searchQuery}`)
+          setPagination(0)
+          setData(JSON.parse(res))
+        }, 500)
       }())
     } else {
       (async function () {
@@ -147,7 +161,7 @@ const TableBody = ({isBigScreen, searchQuery}: TableBodyProps) => {
     window.addEventListener('scroll', scrollEvent)
 
     return () => window.removeEventListener('scroll', scrollEvent)
-  }, [pagination, searchQuery])
+  }, [pagination, searchQuery, throttle])
 
   return (
     <Rows>

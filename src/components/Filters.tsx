@@ -2,6 +2,7 @@ import { SectionWrapper } from "./SectionWrapper"
 import styled from "styled-components"
 import { spacing, colors, fontSizes } from "../variables"
 
+
 const SearchWrapper = styled.div`
   border-radius: ${spacing[1]}px;
   border-style: none;
@@ -48,7 +49,7 @@ const SearchBar = ({ searchState }: SearchBarProps) => {
       <Search value={searchState.searchQuery} 
         type="text" 
         placeholder="search" 
-        onInput={e => searchState.setSearchQuery((e.target as HTMLInputElement).value)} />
+        onChange={e => searchState.setSearchQuery((e.target as HTMLInputElement).value)} />
     </SearchWrapper>
   )
 }
