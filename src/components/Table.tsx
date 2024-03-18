@@ -153,6 +153,7 @@ const TableBody = ({isBigScreen, searchQuery}: TableBodyProps) => {
     <Rows>
       {data.map((item: DataProps, index: number) => {
         if (!item.stock_type) return
+        if (!item.percentage_yield) return
 
         return (
           <tr key={index}>
