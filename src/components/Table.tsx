@@ -140,7 +140,7 @@ const TableBody = ({isBigScreen, searchQuery}: TableBodyProps) => {
   useEffect(() => {
     queryRef.current = searchQuery
 
-    if (searchQuery.length > 0) {
+    if (queryRef.current.length > 0) {
       throttle(async () => {
         if (queryRef.current.length < 1) return 
         const res = await getRequest(`${import.meta.env.VITE_SERVER_URL}/stocks/search/${searchQuery}`)
