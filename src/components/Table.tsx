@@ -122,7 +122,9 @@ const TableBody = ({isBigScreen, searchQuery}: TableBodyProps) => {
   const [pagination, setPagination] = useState(0)
   const [data, setData] = useState([])
   const lock = useRef(false)
+  const queryRef = useRef(searchQuery)
 
+  // Write a test for this
   const throttle = useCallback((cb: () => void, timer: number) => {
     if (!lock.current) { 
       lock.current = true
@@ -134,16 +136,17 @@ const TableBody = ({isBigScreen, searchQuery}: TableBodyProps) => {
     }
   }, [])
 
-
+  // Write a test for these, somehow
   useEffect(() => {
+    queryRef.current = searchQuery
+
     if (searchQuery.length > 0) {
-      (function () {
-        throttle(async () => {
-          const res = await getRequest(`${import.meta.env.VITE_SERVER_URL}/stocks/search/${searchQuery}`)
-          setPagination(0)
-          setData(JSON.parse(res))
-        }, 500)
-      }())
+      throttle(async () => {
+        if (queryRef.current.length < 1) return 
+        const res = await getRequest(`${import.meta.env.VITE_SERVER_URL}/stocks/search/${searchQuery}`)
+        setPagination(0)
+        setData(JSON.parse(res))
+      }, 500)
     } else {
       (async function () {
         const res = await getRequest(`${import.meta.env.VITE_SERVER_URL}/stocks/paginate/${pagination}`)
