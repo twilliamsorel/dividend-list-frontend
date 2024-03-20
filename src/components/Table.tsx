@@ -1,9 +1,8 @@
 import styled from "styled-components"
 import { breakpoints, colors, fontSizes, spacing } from "../variables"
 import { SectionWrapper } from "./SectionWrapper"
-import { useEffect, useState, useRef, useCallback } from "react"
-import { getRequest } from "../utils"
 import { useMediaQuery } from "react-responsive"
+import { DataProps } from "../interfaces/stocks"
 
 const DefaultTable = styled.table`
   border-collapse: collapse;
@@ -102,106 +101,13 @@ const Rows = styled.tbody`
   }
 `
 
-interface DataProps {
-  ticker: string,
-  company: string,
-  stock_type: string,
-  frequency: number,
-  dividend_records: number,
-  dividend_volatility: number,
-  percentage_yield: number,
-  median_percentage_yield: number
-}
-
-interface TableBodyProps {
-  isBigScreen: boolean,
-  searchQuery: string
-}
-
-const TableBody = ({isBigScreen, searchQuery}: TableBodyProps) => {
-  const [pagination, setPagination] = useState(0)
-  const [data, setData] = useState([])
-  const lock = useRef(false)
-  const queryRef = useRef(searchQuery)
-
-  // Write a test for this
-  const throttle = useCallback((cb: () => void, timer: number) => {
-    if (!lock.current) { 
-      lock.current = true
-
-      setTimeout(() => {
-        cb()
-        lock.current = false
-      }, timer )
-    }
-  }, [])
-
-  // Write a test for these, somehow
-  useEffect(() => {
-    queryRef.current = searchQuery
-
-    if (queryRef.current.length > 0) {
-      throttle(async () => {
-        if (queryRef.current.length < 1) return 
-        const res = await getRequest(`${import.meta.env.VITE_SERVER_URL}/stocks/search/${searchQuery}`)
-        setPagination(0)
-        setData(JSON.parse(res))
-      }, 500)
-    } else {
-      (async function () {
-        const res = await getRequest(`${import.meta.env.VITE_SERVER_URL}/stocks/paginate/${pagination}`)
-        
-        setData((data) => pagination === 0 ? JSON.parse(res) : data.concat(JSON.parse(res)))
-      }())
-    }
-
-    const scrollEvent = () => {
-      if (window.innerHeight - document.body.getBoundingClientRect().bottom >= 0 && searchQuery.length === 0) {
-        setPagination(pagination + 1)
-      }
-    }
-
-    window.addEventListener('scroll', scrollEvent)
-
-    return () => window.removeEventListener('scroll', scrollEvent)
-  }, [pagination, searchQuery, throttle])
-
-  return (
-    <Rows>
-      {data.map((item: DataProps, index: number) => {
-        if (!item.stock_type) return
-        if (!item.percentage_yield) return
-
-        return (
-          <tr key={index}>
-            <td>
-              {item.ticker}<br />
-              <label className="inline-block">{item.company}</label>
-            </td>
-            {isBigScreen && (<td>{item.stock_type}</td>)}
-            {isBigScreen && (<td>{item.frequency}</td>)}
-            {isBigScreen && (
-              <td>
-                {item.dividend_records}<label> | {(item.dividend_records / 12).toLocaleString(undefined, {maximumFractionDigits:2})} yrs</label>
-              </td>
-            )}
-            <td>{item.dividend_volatility.toLocaleString(undefined, {maximumFractionDigits:2})}</td>
-            <td>{item.percentage_yield.toLocaleString(undefined, {maximumFractionDigits:2})}%</td>
-            <td>{item.median_percentage_yield.toLocaleString(undefined, {maximumFractionDigits:2})}%</td>
-          </tr>
-        )
-      })}
-    </Rows>
-  )
-}
-
 interface SearchQueryProps {
-  searchQuery: string
+  data: DataProps[]
 }
 
-export default function Table ({searchQuery}: SearchQueryProps) {
+export default function Table ({data}: SearchQueryProps) {
   const isBigScreen = useMediaQuery({ query: `(min-width: ${breakpoints['screen-md']})`})
-
+  
   return (
     <SectionWrapper>
       <DefaultTable>
@@ -216,7 +122,31 @@ export default function Table ({searchQuery}: SearchQueryProps) {
             <th>median apy</th>
           </tr>
         </thead>
-        <TableBody isBigScreen={isBigScreen} searchQuery={searchQuery} />
+        <Rows>
+          {data.map((item: DataProps, index: number) => {
+            if (!item.stock_type) return
+            if (!item.percentage_yield) return
+
+            return (
+              <tr key={index}>
+                <td data-test="ticker">
+                  {item.ticker}<br />
+                  <label className="inline-block">{item.company}</label>
+                </td>
+                {isBigScreen && (<td>{item.stock_type}</td>)}
+                {isBigScreen && (<td>{item.frequency}</td>)}
+                {isBigScreen && (
+                  <td>
+                    {item.dividend_records}<label> | {(item.dividend_records / 12).toLocaleString(undefined, {maximumFractionDigits:2})} yrs</label>
+                  </td>
+                )}
+                <td>{item.dividend_volatility.toLocaleString(undefined, {maximumFractionDigits:2})}</td>
+                <td>{item.percentage_yield.toLocaleString(undefined, {maximumFractionDigits:2})}%</td>
+                <td>{item.median_percentage_yield.toLocaleString(undefined, {maximumFractionDigits:2})}%</td>
+              </tr>
+            )
+          })}
+        </Rows>
       </DefaultTable>
     </SectionWrapper>
   )
