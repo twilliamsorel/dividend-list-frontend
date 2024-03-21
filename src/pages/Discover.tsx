@@ -35,7 +35,7 @@ export default function Discover () {
         if (queryRef.current.length < 1) return 
         setPagination(0)
         setData(JSON.parse(res))
-      }, 500)
+      }, 400)
     } else {
       (async function () {
         const res = await getRequest(`${import.meta.env.VITE_SERVER_URL}/stocks/paginate/${pagination}?sort_by=${activeSort.category}&direction=${activeSort.direction}`)

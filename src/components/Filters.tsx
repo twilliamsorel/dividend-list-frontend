@@ -1,7 +1,16 @@
 import { SectionWrapper } from "./SectionWrapper"
 import styled from "styled-components"
 import { spacing, colors, fontSizes, breakpoints } from "../variables"
+import DownArrow from "../assets/downArrow"
+import { useState } from "react"
 
+const SectionWrapperExt = styled(SectionWrapper)`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: ${spacing[8]}px;
+`
 
 const SearchWrapper = styled.div`
   border-radius: ${spacing[1]}px;
@@ -37,6 +46,41 @@ const Search = styled.input`
   width: 100%;
 `
 
+const FilterPanelContainer = styled.div`
+  width: 100%;
+  max-width: 640px;
+  margin-top: -${spacing[6]}px;
+  padding: ${spacing[11]}px;
+  border: 1px solid ${colors['neutral-500']};
+  background: ${colors['neutral-1000']};
+`
+
+const FiltersButton = styled.div`
+  padding: ${spacing[2]}px ${spacing[4]}px;
+  background: ${colors['primary-200']};
+  border-radius: ${spacing[1]}px;
+  margin: 0;
+  color: ${colors['neutral-1100']};
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: 400ms background;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  column-gap: ${spacing[2]}px;
+
+  &:hover {
+    background: ${colors['primary-300']};
+  }
+
+  &.open {
+    svg {
+      transform: rotate(180deg);
+    }
+  }
+`
+
 interface SearchBarProps {
   searchState: {
     searchQuery: string,
@@ -58,10 +102,24 @@ const SearchBar = ({ searchState }: SearchBarProps) => {
   )
 }
 
-export default function Filters({ searchState }: SearchBarProps) {
+const FiltersPanel = () => {
   return (
-    <SectionWrapper>
-      <SearchBar searchState={searchState} />
-    </SectionWrapper>
+    <FilterPanelContainer>placeholder</FilterPanelContainer>
+  )
+}
+
+export default function Filters({ searchState }: SearchBarProps) {
+  const [panelOpen, setPanelState] = useState(false)
+
+  return (
+    <>
+      <SectionWrapperExt>
+        <FiltersButton onClick={() => setPanelState(!panelOpen)} className={panelOpen ? 'open' : 'closed'}>Filters <DownArrow color="#FFF" /></FiltersButton>
+        <SearchBar searchState={searchState} />
+      </SectionWrapperExt>
+      <SectionWrapper>
+        {panelOpen && <FiltersPanel />}
+      </SectionWrapper>
+    </>
   )
 }
