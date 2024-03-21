@@ -7,6 +7,7 @@ import { getRequest } from "../utils"
 export default function Discover () {
   const [searchQuery, setSearchQuery] = useState('')
   const [pagination, setPagination] = useState(0)
+  const [activeSort, setActiveSort] = useState({category: 'ticker', direction: 'asc'})
   const [data, setData] = useState([])
   const lock = useRef(false)
   const queryRef = useRef(searchQuery)
@@ -37,7 +38,7 @@ export default function Discover () {
       }, 500)
     } else {
       (async function () {
-        const res = await getRequest(`${import.meta.env.VITE_SERVER_URL}/stocks/paginate/${pagination}`)
+        const res = await getRequest(`${import.meta.env.VITE_SERVER_URL}/stocks/paginate/${pagination}?sort_by=${activeSort.category}&direction=${activeSort.direction}`)
         
         setData((data) => pagination === 0 ? JSON.parse(res) : data.concat(JSON.parse(res)))
       }())
@@ -52,13 +53,13 @@ export default function Discover () {
     window.addEventListener('scroll', scrollEvent)
 
     return () => window.removeEventListener('scroll', scrollEvent)
-  }, [pagination, searchQuery, throttle])
+  }, [pagination, searchQuery, throttle, activeSort])
 
   return (
     <>
       <MainNav title="Discover" />
       <Filters searchState={{ searchQuery, setSearchQuery }} />
-      <Table data={data} />
+      <Table data={data} filters={{setPagination, sort: { activeSort, setActiveSort}}} />
     </>
   )
 }

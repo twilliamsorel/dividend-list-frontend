@@ -3,7 +3,6 @@ import { breakpoints, colors, fontSizes, misc, spacing } from "../variables"
 import { SectionWrapper } from "./SectionWrapper"
 import { useMediaQuery } from "react-responsive"
 import { DataProps } from "../interfaces/stocks"
-import { useState } from "react"
 
 const DefaultTable = styled.table`
   border-collapse: collapse;
@@ -25,16 +24,19 @@ const DefaultTable = styled.table`
         padding: ${spacing[3]}px 0;
         text-align: left;
         font-size: ${fontSizes[0]}px;
-        cursor: pointer;
 
-        &.down::after {
+        &:not([data-tooltip="false"]) {
+          cursor: pointer;
+        }
+
+        &.asc::after {
           content: '${String.fromCharCode(9207)}';
           width: ${spacing[6]}px;
           height: ${spacing[6]}px;
           margin-left: ${spacing[1]}px;
         }
 
-        &.up::after {
+        &.desc::after {
           content: '${String.fromCharCode(9206)}';
           width: ${spacing[6]}px;
           height: ${spacing[6]}px;
@@ -120,15 +122,30 @@ const Rows = styled.tbody`
   }
 `
 
-interface SearchQueryProps {
-  data: DataProps[]
+interface SortProps {
+  category: string,
+  direction: string
 }
 
-export default function Table ({data}: SearchQueryProps) {
-  const isBigScreen = useMediaQuery({ query: `(min-width: ${breakpoints['screen-md']})`})
-  const [activeSort, setActiveSort] = useState({category: '', direction: ''})
+interface SearchQueryProps {
+  data: DataProps[],
+  filters: {
+    setPagination: (page: number)  => void,
+    sort: {
+      activeSort: { category: string, direction: string, }
+      setActiveSort: ({ category, direction }: SortProps) => void
+    }
+  }
+}
 
-  const sortFilters = () => activeSort.direction === 'down' ? 'up' : activeSort.direction === 'up' ? '' : 'down'
+export default function Table ({data, filters}: SearchQueryProps) {
+  const isBigScreen = useMediaQuery({ query: `(min-width: ${breakpoints['screen-md']})`})
+  const { activeSort, setActiveSort } = filters.sort
+
+  const sortFilters = () => { 
+    filters.setPagination(0)
+    return activeSort.direction === 'desc' ? 'asc' : activeSort.direction === 'asc' ? '' : 'desc' 
+  }
   
   return (
     <SectionWrapper>
@@ -136,7 +153,7 @@ export default function Table ({data}: SearchQueryProps) {
         <thead>
           <tr>
             <th onClick={() => setActiveSort({category: 'ticker', direction: sortFilters()})} className={activeSort.category === 'ticker' ? activeSort.direction : ''}>ticker</th>
-            {isBigScreen && (<th onClick={() => setActiveSort({category: 'stock_type', direction: sortFilters()})} className={activeSort.category === 'stock_type' ? activeSort.direction : ''}>stock type</th>)}
+            {isBigScreen && (<th data-tooltip={false}>stock type</th>)}
             {isBigScreen && (<th onClick={() => setActiveSort({category: 'frequency', direction: sortFilters()})} className={activeSort.category === 'frequency' ? activeSort.direction : ''}>frequency</th>)}
             {isBigScreen && (<th onClick={() => setActiveSort({category: 'dividend_records', direction: sortFilters()})} className={activeSort.category === 'dividend_records' ? activeSort.direction : ''}>div records</th>)}
             <th onClick={() => setActiveSort({category: 'dividend_volatility', direction: sortFilters()})} className={activeSort.category === 'dividend_volatility' ? activeSort.direction : ''}>div vol<span style={isBigScreen ? {display: 'inline'} : {display: 'none'}}>atility</span></th>
