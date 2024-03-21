@@ -7,7 +7,7 @@ import { getRequest } from "../utils"
 export default function Discover () {
   const [searchQuery, setSearchQuery] = useState('')
   const [pagination, setPagination] = useState(0)
-  const [activeSort, setActiveSort] = useState({category: 'ticker', direction: 'asc'})
+  const [activeSort, setActiveSort] = useState({category: 0, direction: 'asc'})
   const [data, setData] = useState([])
   const lock = useRef(false)
   const queryRef = useRef(searchQuery)

@@ -123,7 +123,7 @@ const Rows = styled.tbody`
 `
 
 interface SortProps {
-  category: string,
+  category: number,
   direction: string
 }
 
@@ -132,7 +132,7 @@ interface SearchQueryProps {
   filters: {
     setPagination: (page: number)  => void,
     sort: {
-      activeSort: { category: string, direction: string, }
+      activeSort: { category: number, direction: string, }
       setActiveSort: ({ category, direction }: SortProps) => void
     }
   }
@@ -144,7 +144,7 @@ export default function Table ({data, filters}: SearchQueryProps) {
 
   const sortFilters = () => { 
     filters.setPagination(0)
-    return activeSort.direction === 'desc' ? 'asc' : activeSort.direction === 'asc' ? '' : 'desc' 
+    return activeSort.direction === 'desc' ? 'asc' : 'desc' 
   }
   
   return (
@@ -152,13 +152,13 @@ export default function Table ({data, filters}: SearchQueryProps) {
       <DefaultTable>
         <thead>
           <tr>
-            <th onClick={() => setActiveSort({category: 'ticker', direction: sortFilters()})} className={activeSort.category === 'ticker' ? activeSort.direction : ''}>ticker</th>
+            <th onClick={() => setActiveSort({category: 0, direction: sortFilters()})} className={activeSort.category === 0 ? activeSort.direction : ''}>ticker</th>
             {isBigScreen && (<th data-tooltip={false}>stock type</th>)}
-            {isBigScreen && (<th onClick={() => setActiveSort({category: 'frequency', direction: sortFilters()})} className={activeSort.category === 'frequency' ? activeSort.direction : ''}>frequency</th>)}
-            {isBigScreen && (<th onClick={() => setActiveSort({category: 'dividend_records', direction: sortFilters()})} className={activeSort.category === 'dividend_records' ? activeSort.direction : ''}>div records</th>)}
-            <th onClick={() => setActiveSort({category: 'dividend_volatility', direction: sortFilters()})} className={activeSort.category === 'dividend_volatility' ? activeSort.direction : ''}>div vol<span style={isBigScreen ? {display: 'inline'} : {display: 'none'}}>atility</span></th>
-            <th onClick={() => setActiveSort({category: 'percentage_yield', direction: sortFilters()})} className={activeSort.category === 'percentage_yield' ? activeSort.direction : ''}>apy</th>
-            <th onClick={() => setActiveSort({category: 'median_percentage_yield', direction: sortFilters()})} className={activeSort.category === 'median_percentage_yield' ? activeSort.direction : ''}>median apy</th>
+            {isBigScreen && (<th onClick={() => setActiveSort({category: 1, direction: sortFilters()})} className={activeSort.category === 1 ? activeSort.direction : ''}>frequency</th>)}
+            {isBigScreen && (<th onClick={() => setActiveSort({category: 2, direction: sortFilters()})} className={activeSort.category === 2 ? activeSort.direction : ''}>div records</th>)}
+            <th onClick={() => setActiveSort({category: 3, direction: sortFilters()})} className={activeSort.category === 3 ? activeSort.direction : ''}>div vol<span style={isBigScreen ? {display: 'inline'} : {display: 'none'}}>atility</span></th>
+            <th onClick={() => setActiveSort({category: 4, direction: sortFilters()})} className={activeSort.category === 4 ? activeSort.direction : ''}>apy</th>
+            <th onClick={() => setActiveSort({category: 5, direction: sortFilters()})} className={activeSort.category === 5 ? activeSort.direction : ''}>median apy</th>
           </tr>
         </thead>
         <Rows>

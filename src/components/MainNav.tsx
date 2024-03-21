@@ -123,9 +123,8 @@ export function NavItems () {
               isActive ? "active" : isPending ? "pending" : ""
             }> Discover </NavLink>
       </li>
+      <li><a href=''>About</a></li>
       <li><a href=''>Dashboard</a></li>
-      <li><a href=''>Settings</a></li>
-      <li><a href=''>Logout</a></li>
     </ul>
   )
 }
