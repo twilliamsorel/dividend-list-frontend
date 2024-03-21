@@ -3,6 +3,7 @@ import { breakpoints, colors, fontSizes, spacing } from "../variables"
 import { SectionWrapper } from "./SectionWrapper"
 import { useMediaQuery } from "react-responsive"
 import { DataProps } from "../interfaces/stocks"
+import { useState } from "react"
 
 const DefaultTable = styled.table`
   border-collapse: collapse;
@@ -21,6 +22,21 @@ const DefaultTable = styled.table`
         padding: ${spacing[3]}px 0;
         text-align: left;
         font-size: ${fontSizes[0]}px;
+        cursor: pointer;
+
+        &.down::after {
+          content: '${String.fromCharCode(9207)}';
+          width: ${spacing[6]}px;
+          height: ${spacing[6]}px;
+          margin-left: ${spacing[1]}px;
+        }
+
+        &.up::after {
+          content: '${String.fromCharCode(9206)}';
+          width: ${spacing[6]}px;
+          height: ${spacing[6]}px;
+          margin-left: ${spacing[1]}px;
+        }
       }
     }
   }
@@ -107,19 +123,22 @@ interface SearchQueryProps {
 
 export default function Table ({data}: SearchQueryProps) {
   const isBigScreen = useMediaQuery({ query: `(min-width: ${breakpoints['screen-md']})`})
+  const [activeSort, setActiveSort] = useState({category: '', direction: ''})
+
+  const sortFilters = () => activeSort.direction === 'down' ? 'up' : activeSort.direction === 'up' ? '' : 'down'
   
   return (
     <SectionWrapper>
       <DefaultTable>
         <thead>
           <tr>
-            <th>ticker</th>
-            {isBigScreen && (<th>stock type</th>)}
-            {isBigScreen && (<th>frequency</th>)}
-            {isBigScreen && (<th>div records</th>)}
-            <th>div vol<span style={isBigScreen ? {display: 'inline'} : {display: 'none'}}>atility</span></th>
-            <th>apy</th>
-            <th>median apy</th>
+            <th onClick={() => setActiveSort({category: 'ticker', direction: sortFilters()})} className={activeSort.category === 'ticker' ? activeSort.direction : ''}>ticker</th>
+            {isBigScreen && (<th onClick={() => setActiveSort({category: 'stock_type', direction: sortFilters()})} className={activeSort.category === 'stock_type' ? activeSort.direction : ''}>stock type</th>)}
+            {isBigScreen && (<th onClick={() => setActiveSort({category: 'frequency', direction: sortFilters()})} className={activeSort.category === 'frequency' ? activeSort.direction : ''}>frequency</th>)}
+            {isBigScreen && (<th onClick={() => setActiveSort({category: 'dividend_records', direction: sortFilters()})} className={activeSort.category === 'dividend_records' ? activeSort.direction : ''}>div records</th>)}
+            <th onClick={() => setActiveSort({category: 'dividend_volatility', direction: sortFilters()})} className={activeSort.category === 'dividend_volatility' ? activeSort.direction : ''}>div vol<span style={isBigScreen ? {display: 'inline'} : {display: 'none'}}>atility</span></th>
+            <th onClick={() => setActiveSort({category: 'percentage_yield', direction: sortFilters()})} className={activeSort.category === 'percentage_yield' ? activeSort.direction : ''}>apy</th>
+            <th onClick={() => setActiveSort({category: 'median_percentage_yield', direction: sortFilters()})} className={activeSort.category === 'median_percentage_yield' ? activeSort.direction : ''}>median apy</th>
           </tr>
         </thead>
         <Rows>

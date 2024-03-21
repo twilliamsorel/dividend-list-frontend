@@ -1,6 +1,6 @@
 import { SectionWrapper } from "./SectionWrapper"
 import styled from "styled-components"
-import { spacing, colors, fontSizes } from "../variables"
+import { spacing, colors, fontSizes, breakpoints } from "../variables"
 
 
 const SearchWrapper = styled.div`
@@ -14,7 +14,11 @@ const SearchWrapper = styled.div`
   align-items: center;
   padding-left: ${spacing[3]}px;
   background: ${colors['neutral-1100']};
-  /* overflow: hidden; */
+  margin: 0 ${spacing[3]}px 0 ${spacing[3]}px;
+
+  @media screen and (min-width: ${breakpoints['screen-md']}) {
+    margin: 0;
+  }
 `
 
 const SearchIcon = styled.div`
