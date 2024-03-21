@@ -1,5 +1,5 @@
 import styled from "styled-components"
-import { breakpoints, colors, fontSizes, spacing } from "../variables"
+import { breakpoints, colors, fontSizes, misc, spacing } from "../variables"
 import { SectionWrapper } from "./SectionWrapper"
 import { useMediaQuery } from "react-responsive"
 import { DataProps } from "../interfaces/stocks"
@@ -14,6 +14,9 @@ const DefaultTable = styled.table`
   margin: ${spacing[6]}px 0;
 
   thead {
+    position: sticky;
+    top: ${misc['title-height-small']};
+
     tr {
       background: ${colors['neutral-900']};
       border-bottom: 1px solid ${colors['neutral-700']};
