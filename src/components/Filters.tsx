@@ -104,7 +104,7 @@ const SearchBar = ({ searchState }: SearchBarProps) => {
 
 const FiltersPanel = () => {
   return (
-    <FilterPanelContainer>placeholder</FilterPanelContainer>
+    <FilterPanelContainer data-test="panel">placeholder</FilterPanelContainer>
   )
 }
 

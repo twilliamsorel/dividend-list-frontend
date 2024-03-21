@@ -1,4 +1,4 @@
-import {expect, it, describe} from 'vitest'
+import {expect, it, describe, vi} from 'vitest'
 import Filters from './Filters'
 import { render } from '@testing-library/react'
 import React from 'react'

@@ -3,6 +3,7 @@ import { breakpoints, colors, fontSizes, misc, spacing } from "../variables"
 import { SectionWrapper } from "./SectionWrapper"
 import { useMediaQuery } from "react-responsive"
 import { DataProps } from "../interfaces/stocks"
+import { SortProps } from "../interfaces/stocks"
 
 const DefaultTable = styled.table`
   border-collapse: collapse;
@@ -121,11 +122,6 @@ const Rows = styled.tbody`
     border: .5px solid ${colors['neutral-700']};
   }
 `
-
-interface SortProps {
-  category: number,
-  direction: string
-}
 
 interface SearchQueryProps {
   data: DataProps[],
