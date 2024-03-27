@@ -1,7 +1,7 @@
 import { SectionWrapper } from "./SectionWrapper"
 import styled from "styled-components"
 import { spacing, colors, fontSizes, breakpoints } from "../variables"
-import DownArrow from "../assets/downArrow"
+import DownArrow from "../assets/DownArrow"
 import { useState } from "react"
 
 const SectionWrapperExt = styled(SectionWrapper)`
