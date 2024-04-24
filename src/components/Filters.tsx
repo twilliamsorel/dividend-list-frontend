@@ -94,9 +94,9 @@ const SearchBar = ({ searchState }: SearchBarProps) => {
       <SearchIcon>
         <span className="material-symbols-outlined">search</span>
       </SearchIcon>
-      <Search value={searchState.searchQuery} 
-        type="text" 
-        placeholder="search" 
+      <Search value={searchState.searchQuery}
+        type="text"
+        placeholder="search"
         onChange={e => searchState.setSearchQuery((e.target as HTMLInputElement).value)} />
     </SearchWrapper>
   )
@@ -104,7 +104,12 @@ const SearchBar = ({ searchState }: SearchBarProps) => {
 
 const FiltersPanel = () => {
   return (
-    <FilterPanelContainer data-test="panel">placeholder</FilterPanelContainer>
+    <FilterPanelContainer data-test="panel">
+      <form>
+        <input type="number"></input>
+        <input type="number"></input>
+      </form>
+    </FilterPanelContainer>
   )
 }
 
