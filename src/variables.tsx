@@ -1,4 +1,4 @@
-export const spacing = Array.from({length: 16}, (_v, i) => (i) * 4)
+export const spacing = Array.from({ length: 16 }, (_v, i) => (i) * 4)
 export const fontSizes = [14, 16, 18, 20, 22, 24, 28, 32, 36, 40, 44]
 
 export const colors = {
@@ -28,6 +28,6 @@ export const breakpoints = {
 }
 
 export const misc = {
-  'title-height-small': '79px',
-  'title-height-large': '94px'
+  'title-height-small': '92px',
+  'title-height-large': '79px'
 }

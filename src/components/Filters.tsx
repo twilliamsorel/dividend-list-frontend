@@ -9,7 +9,11 @@ const SectionWrapperExt = styled(SectionWrapper)`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  margin-top: ${spacing[8]}px;
+  margin-top: ${spacing[2]}px;
+
+  @media screen and (min-width: ${breakpoints['screen-md']}) {
+    margin-top: ${spacing[8]}px;
+  }
 `
 
 const SearchWrapper = styled.div`
@@ -23,7 +27,7 @@ const SearchWrapper = styled.div`
   align-items: center;
   padding-left: ${spacing[3]}px;
   background: ${colors['neutral-1100']};
-  margin: 0 ${spacing[3]}px 0 ${spacing[3]}px;
+  margin: 0 0 0 ${spacing[3]}px;
 
   @media screen and (min-width: ${breakpoints['screen-md']}) {
     margin: 0;
@@ -94,9 +98,9 @@ const SearchBar = ({ searchState }: SearchBarProps) => {
       <SearchIcon>
         <span className="material-symbols-outlined">search</span>
       </SearchIcon>
-      <Search value={searchState.searchQuery} 
-        type="text" 
-        placeholder="search" 
+      <Search value={searchState.searchQuery}
+        type="text"
+        placeholder="search"
         onChange={e => searchState.setSearchQuery((e.target as HTMLInputElement).value)} />
     </SearchWrapper>
   )
