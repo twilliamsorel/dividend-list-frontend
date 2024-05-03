@@ -17,6 +17,10 @@ const DefaultTable = styled.table`
     position: sticky;
     top: ${misc['title-height-small']};
 
+    @media screen and (min-width: ${breakpoints['screen-md']}) {
+      top: ${misc['title-height-large']};
+    }
+
     tr {
       background: ${colors['neutral-900']};
       border-bottom: 1px solid ${colors['neutral-700']};
@@ -126,7 +130,7 @@ const Rows = styled.tbody`
 interface SearchQueryProps {
   data: DataProps[],
   filters: {
-    setPagination: (page: number)  => void,
+    setPagination: (page: number) => void,
     sort: {
       activeSort: { category: number, direction: string, }
       setActiveSort: ({ category, direction }: SortProps) => void
@@ -134,27 +138,27 @@ interface SearchQueryProps {
   }
 }
 
-export default function Table ({data, filters}: SearchQueryProps) {
-  const isBigScreen = useMediaQuery({ query: `(min-width: ${breakpoints['screen-md']})`})
+export default function Table({ data, filters }: SearchQueryProps) {
+  const isBigScreen = useMediaQuery({ query: `(min-width: ${breakpoints['screen-md']})` })
   const { activeSort, setActiveSort } = filters.sort
 
-  const sortFilters = () => { 
+  const sortFilters = () => {
     filters.setPagination(0)
-    return activeSort.direction === 'desc' ? 'asc' : 'desc' 
+    return activeSort.direction === 'desc' ? 'asc' : 'desc'
   }
-  
+
   return (
     <SectionWrapper>
       <DefaultTable>
         <thead>
           <tr>
-            <th onClick={() => setActiveSort({category: 0, direction: sortFilters()})} className={activeSort.category === 0 ? activeSort.direction : ''}>ticker</th>
+            <th onClick={() => setActiveSort({ category: 0, direction: sortFilters() })} className={activeSort.category === 0 ? activeSort.direction : ''}>ticker</th>
             {isBigScreen && (<th data-tooltip={false}>stock type</th>)}
-            {isBigScreen && (<th onClick={() => setActiveSort({category: 1, direction: sortFilters()})} className={activeSort.category === 1 ? activeSort.direction : ''}>frequency</th>)}
-            {isBigScreen && (<th onClick={() => setActiveSort({category: 2, direction: sortFilters()})} className={activeSort.category === 2 ? activeSort.direction : ''}>div records</th>)}
-            <th onClick={() => setActiveSort({category: 3, direction: sortFilters()})} className={activeSort.category === 3 ? activeSort.direction : ''}>div vol<span style={isBigScreen ? {display: 'inline'} : {display: 'none'}}>atility</span></th>
-            <th onClick={() => setActiveSort({category: 4, direction: sortFilters()})} className={activeSort.category === 4 ? activeSort.direction : ''}>apy</th>
-            <th onClick={() => setActiveSort({category: 5, direction: sortFilters()})} className={activeSort.category === 5 ? activeSort.direction : ''}>median apy</th>
+            {isBigScreen && (<th onClick={() => setActiveSort({ category: 1, direction: sortFilters() })} className={activeSort.category === 1 ? activeSort.direction : ''}>frequency</th>)}
+            {isBigScreen && (<th onClick={() => setActiveSort({ category: 2, direction: sortFilters() })} className={activeSort.category === 2 ? activeSort.direction : ''}>div records</th>)}
+            <th onClick={() => setActiveSort({ category: 3, direction: sortFilters() })} className={activeSort.category === 3 ? activeSort.direction : ''}>div vol<span style={isBigScreen ? { display: 'inline' } : { display: 'none' }}>atility</span></th>
+            <th onClick={() => setActiveSort({ category: 4, direction: sortFilters() })} className={activeSort.category === 4 ? activeSort.direction : ''}>apy</th>
+            <th onClick={() => setActiveSort({ category: 5, direction: sortFilters() })} className={activeSort.category === 5 ? activeSort.direction : ''}>median apy</th>
           </tr>
         </thead>
         <Rows>
@@ -172,12 +176,12 @@ export default function Table ({data, filters}: SearchQueryProps) {
                 {isBigScreen && (<td>{item.frequency}</td>)}
                 {isBigScreen && (
                   <td>
-                    {item.dividend_records}<label> | {(item.dividend_records / 12).toLocaleString(undefined, {maximumFractionDigits:2})} yrs</label>
+                    {item.dividend_records}<label> | {(item.dividend_records / 12).toLocaleString(undefined, { maximumFractionDigits: 2 })} yrs</label>
                   </td>
                 )}
-                <td>{item.dividend_volatility.toLocaleString(undefined, {maximumFractionDigits:2})}</td>
-                <td>{item.percentage_yield.toLocaleString(undefined, {maximumFractionDigits:2})}%</td>
-                <td>{item.median_percentage_yield.toLocaleString(undefined, {maximumFractionDigits:2})}%</td>
+                <td>{item.dividend_volatility.toLocaleString(undefined, { maximumFractionDigits: 2 })}</td>
+                <td>{item.percentage_yield.toLocaleString(undefined, { maximumFractionDigits: 2 })}%</td>
+                <td>{item.median_percentage_yield.toLocaleString(undefined, { maximumFractionDigits: 2 })}%</td>
               </tr>
             )
           })}
