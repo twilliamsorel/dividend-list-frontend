@@ -37,3 +37,41 @@ export function postRequest(url: string, data: object) {
     xhr.send(JSON.stringify(data));
   })
 }
+
+export class Throttle {
+  lock: boolean
+  callback: () => void
+  timer: number
+
+  constructor() {
+    this.lock = false
+    this.callback = () => undefined
+    this.timer = 0
+  }
+
+  private setCallback(fn: () => void) {
+    this.callback = fn
+  }
+
+  private setTimer(timer: number) {
+    this.timer = timer
+  }
+
+  private executeCallback() {
+    if (!this.lock) {
+      this.lock = true
+
+      setTimeout(() => {
+        this.callback()
+        this.lock = false
+      }, this.timer)
+    }
+  }
+
+  public run(fn: () => void, timer: number) {
+    this.setCallback(fn)
+    this.setTimer(timer)
+
+    this.executeCallback()
+  }
+}

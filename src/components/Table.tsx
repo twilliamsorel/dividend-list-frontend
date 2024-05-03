@@ -2,8 +2,7 @@ import styled from "styled-components"
 import { breakpoints, colors, fontSizes, misc, spacing } from "../variables"
 import { SectionWrapper } from "./SectionWrapper"
 import { useMediaQuery } from "react-responsive"
-import { DataProps } from "../interfaces/stocks"
-import { SortProps } from "../interfaces/stocks"
+import { TableInterface } from "../interfaces/table"
 
 const DefaultTable = styled.table`
   border-collapse: collapse;
@@ -127,26 +126,10 @@ const Rows = styled.tbody`
   }
 `
 
-interface SearchQueryProps {
-  data: DataProps[],
-  filters: {
-    setPagination: (page: number) => void,
-    sort: {
-      activeSort: { category: number, direction: string, }
-      setActiveSort: ({ category, direction }: SortProps) => void
-    }
-  }
-}
-
-export default function Table({ data, filters }: SearchQueryProps) {
+export default function Table(table: TableInterface) {
   const isBigScreen = useMediaQuery({ query: `(min-width: ${breakpoints['screen-md']})` })
-  const { activeSort, setActiveSort } = filters.sort
 
-  const sortFilters = () => {
-    filters.setPagination(0)
-    return activeSort.direction === 'desc' ? 'asc' : 'desc'
-  }
-
+  // Add set active sort on table interface, use bellow
   return (
     <SectionWrapper>
       <DefaultTable>
