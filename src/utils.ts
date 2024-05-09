@@ -1,3 +1,5 @@
+import { useCallback, useRef } from "react";
+
 export const toggleNav = () => {
   document.body.classList.contains('mobile-nav-open') ? document.body.classList.remove('mobile-nav-open') : document.body.classList.add('mobile-nav-open')
 }
@@ -36,4 +38,19 @@ export function postRequest(url: string, data: object) {
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.send(JSON.stringify(data));
   })
+}
+
+export function useThrottle() {
+  const lock = useRef(false)
+
+  return useCallback((cb: () => void, timer: number) => {
+    if (!lock.current) {
+      lock.current = true
+
+      setTimeout(() => {
+        cb()
+        lock.current = false
+      }, timer)
+    }
+  }, [])
 }

@@ -1,28 +1,17 @@
 import MainNav from "../components/MainNav"
 import Filters from "../components/Filters"
 import Table from "../components/Table"
-import { useState, useRef, useCallback, useEffect } from "react"
+import { useState, useRef, useEffect } from "react"
+import { useThrottle } from "../utils"
 import { getRequest } from "../utils"
 
-export default function Discover () {
+export default function Discover() {
   const [searchQuery, setSearchQuery] = useState('')
   const [pagination, setPagination] = useState(0)
-  const [activeSort, setActiveSort] = useState({category: 0, direction: 'asc'})
+  const [activeSort, setActiveSort] = useState({ category: 0, direction: 'asc' })
   const [data, setData] = useState([])
-  const lock = useRef(false)
   const queryRef = useRef(searchQuery)
-
-  // Write a test for this
-  const throttle = useCallback((cb: () => void, timer: number) => {
-    if (!lock.current) { 
-      lock.current = true
-
-      setTimeout(() => {
-        cb()
-        lock.current = false
-      }, timer )
-    }
-  }, [])
+  const throttle = useThrottle()
 
   // Write a test for these, somehow
   useEffect(() => {
@@ -31,15 +20,15 @@ export default function Discover () {
     if (queryRef.current.length > 0) {
       throttle(async () => {
         const res = await getRequest(`${import.meta.env.VITE_SERVER_URL}/stocks/search/${searchQuery}`)
-        
-        if (queryRef.current.length < 1) return 
+
+        if (queryRef.current.length < 1) return
         setPagination(0)
         setData(JSON.parse(res))
       }, 400)
     } else {
       (async function () {
         const res = await getRequest(`${import.meta.env.VITE_SERVER_URL}/stocks/paginate/${pagination}?sort_by=${activeSort.category}&direction=${activeSort.direction}`)
-        
+
         setData((data) => pagination === 0 ? JSON.parse(res) : data.concat(JSON.parse(res)))
       }())
     }
@@ -59,7 +48,7 @@ export default function Discover () {
     <>
       <MainNav title="Discover" />
       <Filters searchState={{ searchQuery, setSearchQuery }} />
-      <Table data={data} filters={{setPagination, sort: { activeSort, setActiveSort}}} />
+      <Table data={data} filters={{ setPagination, sort: { activeSort, setActiveSort } }} />
     </>
   )
 }
