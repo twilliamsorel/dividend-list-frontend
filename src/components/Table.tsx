@@ -3,7 +3,7 @@ import { breakpoints, colors, fontSizes, misc, spacing } from "../variables"
 import { SectionWrapper } from "./SectionWrapper"
 import { useMediaQuery } from "react-responsive"
 import { DataProps } from "../interfaces/stocks"
-import { SortProps } from "../interfaces/stocks"
+import { useTableStore } from "../interfaces/stores"
 
 const DefaultTable = styled.table`
   border-collapse: collapse;
@@ -127,42 +127,47 @@ const Rows = styled.tbody`
   }
 `
 
-interface SearchQueryProps {
-  data: DataProps[],
-  filters: {
-    setPagination: (page: number) => void,
-    sort: {
-      activeSort: { category: number, direction: string, }
-      setActiveSort: ({ category, direction }: SortProps) => void
-    }
-  }
-}
-
-export default function Table({ data, filters }: SearchQueryProps) {
+export default function Table() {
   const isBigScreen = useMediaQuery({ query: `(min-width: ${breakpoints['screen-md']})` })
-  const { activeSort, setActiveSort } = filters.sort
+  const table = useTableStore((state) => state)
 
-  const sortFilters = () => {
-    filters.setPagination(0)
-    return activeSort.direction === 'desc' ? 'asc' : 'desc'
+  const setSort = (sort: number) => {
+    const direction = table.sortDirection === 'desc' ? 'asc' : 'desc'
+    table.setPage(0)
+    table.setSort(sort);
+    table.setSortDirection(direction)
   }
+
+  const checkState = (sort: number) => table.sort === sort ? table.sortDirection : ''
 
   return (
     <SectionWrapper>
       <DefaultTable>
         <thead>
           <tr>
-            <th onClick={() => setActiveSort({ category: 0, direction: sortFilters() })} className={activeSort.category === 0 ? activeSort.direction : ''}>ticker</th>
+            <th onClick={() => setSort(0)}
+              className={checkState(0)}>
+              ticker
+            </th>
             {isBigScreen && (<th data-tooltip={false}>stock type</th>)}
-            {isBigScreen && (<th onClick={() => setActiveSort({ category: 1, direction: sortFilters() })} className={activeSort.category === 1 ? activeSort.direction : ''}>frequency</th>)}
-            {isBigScreen && (<th onClick={() => setActiveSort({ category: 2, direction: sortFilters() })} className={activeSort.category === 2 ? activeSort.direction : ''}>div records</th>)}
-            <th onClick={() => setActiveSort({ category: 3, direction: sortFilters() })} className={activeSort.category === 3 ? activeSort.direction : ''}>div vol<span style={isBigScreen ? { display: 'inline' } : { display: 'none' }}>atility</span></th>
-            <th onClick={() => setActiveSort({ category: 4, direction: sortFilters() })} className={activeSort.category === 4 ? activeSort.direction : ''}>apy</th>
-            <th onClick={() => setActiveSort({ category: 5, direction: sortFilters() })} className={activeSort.category === 5 ? activeSort.direction : ''}>median apy</th>
+            {isBigScreen && (<th onClick={() => setSort(1)}
+              className={checkState(1)}>
+              frequency
+            </th>)}
+            {isBigScreen && (<th onClick={() => setSort(2)}
+              className={checkState(2)}>
+              div records
+            </th>)}
+            <th onClick={() => setSort(3)}
+              className={checkState(3)}>div vol<span style={isBigScreen ? { display: 'inline' } : { display: 'none' }}>atility</span>
+            </th>
+            <th onClick={() => setSort(4)}
+              className={checkState(4)}>apy</th>
+            <th onClick={() => setSort(5)} className={checkState(5)}>median apy</th>
           </tr>
         </thead>
         <Rows>
-          {data.map((item: DataProps, index: number) => {
+          {table.data.map((item: DataProps, index: number) => {
             if (!item.stock_type) return
             if (!item.percentage_yield) return
 

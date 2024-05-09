@@ -1,54 +1,52 @@
 import MainNav from "../components/MainNav"
 import Filters from "../components/Filters"
 import Table from "../components/Table"
-import { useState, useRef, useEffect } from "react"
+import { useRef, useEffect } from "react"
 import { useThrottle } from "../utils"
 import { getRequest } from "../utils"
+import { useTableStore } from "../interfaces/stores"
+
 
 export default function Discover() {
-  const [searchQuery, setSearchQuery] = useState('')
-  const [pagination, setPagination] = useState(0)
-  const [activeSort, setActiveSort] = useState({ category: 0, direction: 'asc' })
-  const [data, setData] = useState([])
-  const queryRef = useRef(searchQuery)
+  const table = useTableStore((state) => state)
+  const queryRef = useRef(table.searchQuery)
   const throttle = useThrottle()
 
-  // Write a test for these, somehow
   useEffect(() => {
-    queryRef.current = searchQuery
+    queryRef.current = table.searchQuery
 
     if (queryRef.current.length > 0) {
       throttle(async () => {
-        const res = await getRequest(`${import.meta.env.VITE_SERVER_URL}/stocks/search/${searchQuery}`)
+        const res = await getRequest(`${import.meta.env.VITE_SERVER_URL}/stocks/search/${table.searchQuery}`)
 
         if (queryRef.current.length < 1) return
-        setPagination(0)
-        setData(JSON.parse(res))
+        table.setPage(0)
+        table.setData(JSON.parse(res))
       }, 400)
     } else {
       (async function () {
-        const res = await getRequest(`${import.meta.env.VITE_SERVER_URL}/stocks/paginate/${pagination}?sort_by=${activeSort.category}&direction=${activeSort.direction}`)
-
-        setData((data) => pagination === 0 ? JSON.parse(res) : data.concat(JSON.parse(res)))
+        const res = await getRequest(`${import.meta.env.VITE_SERVER_URL}/stocks/paginate/${table.page}?sort_by=${table.sort}&direction=${table.sortDirection}`)
+        const data = table.page === 0 ? JSON.parse(res) : table.data.concat(JSON.parse(res))
+        table.setData(data)
       }())
     }
 
     const scrollEvent = () => {
-      if (window.innerHeight - document.body.getBoundingClientRect().bottom >= 0 && searchQuery.length === 0) {
-        setPagination(pagination + 1)
+      if (window.innerHeight - document.body.getBoundingClientRect().bottom >= 0 && table.searchQuery.length === 0) {
+        table.setPage(table.page + 1)
       }
     }
 
     window.addEventListener('scroll', scrollEvent)
 
     return () => window.removeEventListener('scroll', scrollEvent)
-  }, [pagination, searchQuery, throttle, activeSort])
+  }, [table, throttle])
 
   return (
     <>
       <MainNav title="Discover" />
-      <Filters searchState={{ searchQuery, setSearchQuery }} />
-      <Table data={data} filters={{ setPagination, sort: { activeSort, setActiveSort } }} />
+      <Filters />
+      <Table />
     </>
   )
 }

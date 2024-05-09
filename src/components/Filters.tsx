@@ -3,6 +3,7 @@ import styled from "styled-components"
 import { spacing, colors, fontSizes, breakpoints } from "../variables"
 import DownArrow from "../assets/DownArrow"
 import { useState } from "react"
+import { useTableStore } from "../interfaces/stores"
 
 const SectionWrapperExt = styled(SectionWrapper)`
   display: flex;
@@ -85,23 +86,17 @@ const FiltersButton = styled.div`
   }
 `
 
-interface SearchBarProps {
-  searchState: {
-    searchQuery: string,
-    setSearchQuery: React.Dispatch<React.SetStateAction<string>>
-  }
-}
-
-const SearchBar = ({ searchState }: SearchBarProps) => {
+const SearchBar = () => {
+  const table = useTableStore((state) => state)
   return (
     <SearchWrapper>
       <SearchIcon>
         <span className="material-symbols-outlined">search</span>
       </SearchIcon>
-      <Search value={searchState.searchQuery}
+      <Search value={table.searchQuery}
         type="text"
         placeholder="search"
-        onChange={e => searchState.setSearchQuery((e.target as HTMLInputElement).value)} />
+        onChange={e => table.setSearchQuery((e.target as HTMLInputElement).value)} />
     </SearchWrapper>
   )
 }
@@ -112,14 +107,14 @@ const FiltersPanel = () => {
   )
 }
 
-export default function Filters({ searchState }: SearchBarProps) {
+export default function Filters() {
   const [panelOpen, setPanelState] = useState(false)
 
   return (
     <>
       <SectionWrapperExt>
         <FiltersButton onClick={() => setPanelState(!panelOpen)} className={panelOpen ? 'open' : 'closed'}>Filters <DownArrow color="#FFF" /></FiltersButton>
-        <SearchBar searchState={searchState} />
+        <SearchBar />
       </SectionWrapperExt>
       <SectionWrapper>
         {panelOpen && <FiltersPanel />}
