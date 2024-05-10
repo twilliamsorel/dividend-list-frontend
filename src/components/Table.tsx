@@ -129,45 +129,49 @@ const Rows = styled.tbody`
 
 export default function Table() {
   const isBigScreen = useMediaQuery({ query: `(min-width: ${breakpoints['screen-md']})` })
-  const table = useTableStore((state) => state)
+  const sortDirection = useTableStore((state) => state.sortDirection)
+  const data = useTableStore((state) => state.data)
+  const setPage = useTableStore((state) => state.setPage)
+  const setSort = useTableStore((state) => state.setSort)
+  const setSortDirection = useTableStore((state) => state.setSortDirection)
 
-  const setSort = (sort: number) => {
-    const direction = table.sortDirection === 'desc' ? 'asc' : 'desc'
-    table.setPage(0)
-    table.setSort(sort);
-    table.setSortDirection(direction)
+  const toggleSort = (sort: number) => {
+    const direction = sortDirection === 'desc' ? 'asc' : 'desc'
+    setPage(0)
+    setSort(sort)
+    setSortDirection(direction)
   }
 
-  const checkState = (sort: number) => table.sort === sort ? table.sortDirection : ''
+  const checkState = (sort: number) => sort === sort ? sortDirection : ''
 
   return (
     <SectionWrapper>
       <DefaultTable>
         <thead>
           <tr>
-            <th onClick={() => setSort(0)}
+            <th onClick={() => toggleSort(0)}
               className={checkState(0)}>
               ticker
             </th>
             {isBigScreen && (<th data-tooltip={false}>stock type</th>)}
-            {isBigScreen && (<th onClick={() => setSort(1)}
+            {isBigScreen && (<th onClick={() => toggleSort(1)}
               className={checkState(1)}>
               frequency
             </th>)}
-            {isBigScreen && (<th onClick={() => setSort(2)}
+            {isBigScreen && (<th onClick={() => toggleSort(2)}
               className={checkState(2)}>
               div records
             </th>)}
-            <th onClick={() => setSort(3)}
+            <th onClick={() => toggleSort(3)}
               className={checkState(3)}>div vol<span style={isBigScreen ? { display: 'inline' } : { display: 'none' }}>atility</span>
             </th>
-            <th onClick={() => setSort(4)}
+            <th onClick={() => toggleSort(4)}
               className={checkState(4)}>apy</th>
-            <th onClick={() => setSort(5)} className={checkState(5)}>median apy</th>
+            <th onClick={() => toggleSort(5)} className={checkState(5)}>median apy</th>
           </tr>
         </thead>
         <Rows>
-          {table.data.map((item: DataProps, index: number) => {
+          {data.map((item: DataProps, index: number) => {
             if (!item.stock_type) return
             if (!item.percentage_yield) return
 

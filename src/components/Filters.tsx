@@ -87,16 +87,18 @@ const FiltersButton = styled.div`
 `
 
 const SearchBar = () => {
-  const table = useTableStore((state) => state)
+  const searchQuery = useTableStore((state) => state.searchQuery) as string
+  const setSearchQuery = useTableStore((state) => state.setSearchQuery)
+
   return (
     <SearchWrapper>
       <SearchIcon>
         <span className="material-symbols-outlined">search</span>
       </SearchIcon>
-      <Search value={table.searchQuery}
+      <Search value={searchQuery}
         type="text"
         placeholder="search"
-        onChange={e => table.setSearchQuery((e.target as HTMLInputElement).value)} />
+        onChange={e => setSearchQuery((e.target as HTMLInputElement).value)} />
     </SearchWrapper>
   )
 }
