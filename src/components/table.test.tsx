@@ -1,7 +1,8 @@
 import { expect, it, describe } from 'vitest'
 import Table from './Table'
-import { render } from '@testing-library/react'
-// import { useTableStore } from '../interfaces/stores'
+import { RenderHookResult, render, renderHook } from '@testing-library/react'
+import { useTableStore, TableState } from '../interfaces/stores'
+import Filters from './Filters'
 
 describe('Testing main table', () => {
   it('should render properly on smaller screen sizes', () => {
@@ -16,15 +17,13 @@ describe('Testing main table', () => {
     const element = component.getByText('stock type')
     expect(element).toBeTruthy()
   })
-  /*
   it('should render search results', async () => {
-    const table = useTableStore
-    table.setSearchQuery('TEST')
-    const { getByText } = render(<Table />);
-    const element = getByText('TEST')
+    const { result } = renderHook(useTableStore) as RenderHookResult<TableState, unknown>
+    result.current.setSearchQuery('TEST')
+    const table = render(<Filters />);
+    const element = table.getByDisplayValue('TEST')
     expect(element).toBeDefined()
   })
-  */
   it('should render sorting class', async () => {
     const { container } = render(<Table />);
     const element = container.querySelector('.asc')
