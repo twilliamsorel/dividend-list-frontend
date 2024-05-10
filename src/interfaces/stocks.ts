@@ -8,8 +8,3 @@ export interface DataProps {
     percentage_yield: number;
     median_percentage_yield: number;
 }
-
-export interface SortProps {
-    category: number;
-    direction: string;
-}

@@ -5,15 +5,15 @@ import React from 'react'
 
 
 describe('Testing filters', () => {
-  it('should render properly', () => {
-    const component = render(<Filters searchState={{ 'searchQuery': 'placeholder' }} />)
+  it('should render search properly', () => {
+    const component = render(<Filters />)
     const element = component.getByPlaceholderText('search')
     expect(element).toBeTruthy()
   })
 
-  it('should pass props', () => {
-    const component = render(<Filters searchState={{ 'searchQuery': 'placeholder' }} />)
-    const element = component.getByDisplayValue('placeholder')
-    expect(element).toBeTruthy()
+  it('should render filters', () => {
+    const component = render(<Filters />)
+    const button = component.findByDisplayValue('Filters')
+    expect(button).toBeTruthy()
   })
 })

@@ -1,7 +1,7 @@
 import { create } from "zustand"
 import { DataProps } from "./stocks"
 
-interface TableState {
+export interface TableState {
     searchQuery: string,
     page: number,
     sort: number,
