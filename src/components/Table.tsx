@@ -131,6 +131,7 @@ export default function Table() {
   const isBigScreen = useMediaQuery({ query: `(min-width: ${breakpoints['screen-md']})` })
   const sortDirection = useTableStore((state) => state.sortDirection)
   const data = useTableStore((state) => state.data)
+  const activeSort = useTableStore((state) => state.sort)
   const setPage = useTableStore((state) => state.setPage)
   const setSort = useTableStore((state) => state.setSort)
   const setSortDirection = useTableStore((state) => state.setSortDirection)
@@ -142,7 +143,7 @@ export default function Table() {
     setSortDirection(direction)
   }
 
-  const checkState = (sort: number) => sort === sort ? sortDirection : ''
+  const checkState = (tabSort: number) => tabSort === activeSort ? sortDirection : ''
 
   return (
     <SectionWrapper>

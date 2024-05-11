@@ -54,3 +54,7 @@ export function useThrottle() {
     }
   }, [])
 }
+
+export function slugify(input: string) {
+  return input.toLowerCase().replace(' ', '-')
+}
