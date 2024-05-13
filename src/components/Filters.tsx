@@ -52,7 +52,7 @@ const Search = styled.input`
   width: 100%;
 `
 
-const FilterPanelContainer = styled.div`
+const FilterPanelContainer = styled.form`
   max-width: 640px;
   margin-top: -${spacing[6]}px;
   padding: ${spacing[11]}px;
@@ -135,6 +135,32 @@ const FilterSelectInput = styled.select`
   }
 `
 
+const FilterPanelButtonsWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  column-gap: ${spacing[2]}px;
+
+  input {
+    padding: ${spacing[2]}px ${spacing[4]}px;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: 4px;
+    font-weight: 700;
+
+    &:nth-child(1) {
+      border: 1px solid ${colors['primary-100']};
+      color: ${colors['primary-100']};
+      background: ${colors['neutral-900']};
+    }
+
+    &:nth-child(2) {
+      border: 1px solid ${colors['primary-200']};
+      color: ${colors['neutral-1100']};
+      background: ${colors['primary-200']};
+    }
+  }
+`
+
 const SearchBar = () => {
   const searchQuery = useTableStore((state) => state.searchQuery) as string
   const setSearchQuery = useTableStore((state) => state.setSearchQuery)
@@ -178,19 +204,28 @@ const FilterSelectItem = ({ label, options }: { label: string, options: string[]
 }
 
 const FiltersPanel = () => {
+  // add form bindings here, for now. Then consider extracting
+  // to a util for testing.
+
   return (
-    <FilterPanelContainer data-test="panel">
-      <FilterNumberItem label="dividend yield" />
-      <FilterNumberItem label="div volatility" />
-      <FilterNumberItem label="stock price" />
-      <FilterNumberItem label="stock volatility" />
-      <FilterNumberItem label="apy" />
-      <FilterNumberItem label="median apy" />
-      <FilterNumberItem label="div records" />
-      <FilterNumberItem label="volume" />
-      <FilterSelectItem label="stock types" options={['ph', 'one', 'two']} />
-      <FilterSelectItem label="frequenct" options={['all', 'quartly', 'monthly']} />
-    </FilterPanelContainer>
+    <form>
+      <FilterPanelContainer data-test="panel">
+        <FilterNumberItem label="dividend yield" />
+        <FilterNumberItem label="div volatility" />
+        <FilterNumberItem label="stock price" />
+        <FilterNumberItem label="stock volatility" />
+        <FilterNumberItem label="apy" />
+        <FilterNumberItem label="median apy" />
+        <FilterNumberItem label="div records" />
+        <FilterNumberItem label="volume" />
+        <FilterSelectItem label="stock types" options={['ph', 'one', 'two']} />
+        <FilterSelectItem label="frequenct" options={['all', 'quartly', 'monthly']} />
+      </FilterPanelContainer>
+      <FilterPanelButtonsWrapper>
+        <input type="submit" value="reset" />
+        <input type="submit" value="apply" />
+      </FilterPanelButtonsWrapper>
+    </form>
   )
 }
 
